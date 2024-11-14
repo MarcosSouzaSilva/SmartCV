@@ -4,7 +4,6 @@ package com.smartcv.smartcv.service;
 import com.smartcv.smartcv.dto.PerfilDto;
 import com.smartcv.smartcv.dto.Profession;
 import com.smartcv.smartcv.dto.RegisterDto;
-import com.smartcv.smartcv.dto.converter.ProfessionConverter;
 import com.smartcv.smartcv.model.Users;
 import com.smartcv.smartcv.repository.UsersRepository;
 import com.smartcv.smartcv.strategy.CookieAttributes;
@@ -32,18 +31,10 @@ public class ServicePerfil {
     private EmailValid emailValid;
 
     @Autowired
-    private final ProfessionConverter professionConverter;
-
-    @Autowired
     private CookieAttributes cookieAttributes;
 
-    public ServicePerfil(ProfessionConverter professionConverter) {
-        this.professionConverter = professionConverter;
-    }
-
-    public ModelAndView page() {
+    public ModelAndView page(@ModelAttribute("dtoRegister") PerfilDto dto) {
         ModelAndView mv = new ModelAndView("profile");
-        RegisterDto dto = new RegisterDto();
 
         mv.addObject("perfilDto", dto);
         mv.addObject("listaStatusUser", Profession.values());
@@ -95,11 +86,9 @@ public class ServicePerfil {
 
         Users users = dto.request();
 
-        var invalidEmail = emailValid.validation(users);
-
-        var userOpt = repository.findByEmailAndUsername(users.getEmail(), users.getUsername());
-
         mv.addObject("perfilDto", dto);
+
+        boolean invalidEmail = emailValid.validation(users);
 
         if (bindingResult.hasErrors()) {
             System.err.println("There was a bindingResult error");
@@ -111,53 +100,65 @@ public class ServicePerfil {
             return mv;
         }
 
-        if (userOpt.isPresent()) {
+        Cookie[] cookies = request.getCookies();
+        String userId = null;
 
-            Users user = userOpt.get();
-
-            professionConverter.convert(user.getProfession().name());
-
-            if (repository.findByEmail(users.getEmail()).equals(users.getEmail())) {
-                bindingResult.rejectValue("username", "error.dtoPerfil", "The email already exists");
-                return mv;
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("id".equals(cookie.getName())) {
+                    userId = cookie.getValue();
+                }
             }
+        }
 
-            boolean update = false;
+        if (userId != null) {
 
-            if (!user.getUsername().equals(users.getUsername())) {
-                user.setUsername(users.getUsername());
-                update = true;
+            var id = repository.findById(userId);
+
+            if (id.isPresent()) {
+
+                Users user = id.get();
+
+                if (!user.getEmail().equals(users.getEmail()) && repository.findByEmail(users.getEmail()).isPresent()) {
+                    bindingResult.rejectValue("email", "error.perfilDto", "The email already exists");
+                    return mv;
+                }
+
+                boolean update = false;
+
+                if (!user.getUsername().equals(users.getUsername())) {
+                    user.setUsername(users.getUsername());
+                    update = true;
+                }
+
+                if (!user.getEmail().equals(users.getEmail())) {
+                    user.setEmail(users.getEmail());
+                    update = true;
+                }
+
+                if (update) {
+
+                    repository.save(user);
+
+                    request.getSession().setAttribute("username", user.getUsername());
+                    request.getSession().setAttribute("id", user.getId());
+
+                    Cookie userCookie = new Cookie("username", user.getUsername());
+                    cookieAttributes.setCookieAttributes(userCookie);
+
+                    Cookie idCookie = new Cookie("id", user.getId());
+                    cookieAttributes.setCookieAttributes(idCookie);
+
+                    response.addCookie(idCookie);
+                    response.addCookie(userCookie);
+
+                    return new ModelAndView("redirect:/SmartCV");
+                }
             }
-            if (!user.getEmail().equals(users.getEmail())) {
-                user.setEmail(users.getEmail());
-                update = true;
-            }
-
-            if (update) {
-                repository.save(user);
-
-                request.getSession().setAttribute("username", user.getUsername());
-                request.getSession().setAttribute("id", user.getId());
-                request.getSession().setAttribute("profession", user.getProfession());
-
-                Cookie userCookie = new Cookie("username", user.getUsername());
-                cookieAttributes.setCookieAttributes(userCookie);
-
-                Cookie professionCookie = new Cookie("profession", user.getProfession().name());
-                cookieAttributes.setCookieAttributes(professionCookie);
-
-                Cookie idCookie = new Cookie("id", user.getId());
-                cookieAttributes.setCookieAttributes(idCookie);
-
-                response.addCookie(idCookie);
-                response.addCookie(professionCookie);
-                response.addCookie(userCookie);
-
-                System.out.println("Information updated successfully");
-            }
+        } else {
+            System.out.println(users.getEmail());
+            System.err.println("Valor não presente");
         }
         return new ModelAndView("redirect:/SmartCV");
     }
-
-
 }

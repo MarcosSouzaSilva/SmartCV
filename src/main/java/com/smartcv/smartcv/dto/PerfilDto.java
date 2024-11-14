@@ -8,7 +8,7 @@ public class PerfilDto {
 
     private String email;
 
-    private Profession profession;
+
 
     public PerfilDto() {
     }
@@ -34,13 +34,11 @@ public class PerfilDto {
         Users users = new Users();
         users.setUsername(this.username);
         users.setEmail(this.email);
-        users.setProfession(this.profession);
         return users;
     }
 
     public void fromDtoCadastro(Users user) {
         this.username = user.getUsername();
         this.email = user.getEmail();
-        this.profession = user.getProfession();
     }
 }

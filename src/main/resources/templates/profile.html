@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,40 +31,29 @@
         </div>
 
         <!-- Form -->
-        <form th:action="@{/SmartCV/profileEdit(id=${newUsernameId})}" method="post" th:object="${perfilDto}" class="profile-form" >
+        <form th:action="@{/SmartCV/profile(id=${newUsernameId})}" method="post" th:object="${perfilDto}" class="profile-form" >
             <div class="form-group">
                 <label for="first-name">Name</label>
                 <input type="text" th:field="*{username}" id="first-name" placeholder="Name">
             </div>
 
-            <div class="form-group">
+            <div class="form-group" th:classappend="${#fields.hasErrors('email')} ? 'has-error' : ''">
                 <label for="email">Email</label>
-                <input type="text" th:field="*{email}" id="email" placeholder="Email">
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
-            </div>
-
-            <!--PRECISO ARRUMART O OPTION DE BAAIXO DAS PROFISSOES-->
-
-            <div class="form-group">
-                <label for="work">Profession</label>
-                <select id="work" name="profession" class="select-custom">
-                    <!-- Primeira opção se houver uma profissão selecionada -->
-                    <option th:if="${newUsernameProfession != null}"
-                            th:value="${newUsernameProfession}"
-                            th:text="${newUsernameProfession}"
-                            selected>
-                    </option>
-
-                    <!-- Outras opções da lista -->
-                    <option th:each="profession : ${listaStatusUser}"
-                            th:if="${profession != newUsernameProfession}"
-                            th:value="${profession.name()}"
-                            th:text="${profession.toString()}">
-                    </option>
-                </select>
+                <input type="text" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" th:field="*{email}" id="email" placeholder="Email">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
             </div>
 
 
+            <!--   <div class="form-group">
+                   <label for="work">Profession</label>
+                   <select id="work" name="profession" class="select-custom">
+                       <option th:each="profession : ${listaStatusUser}"
+                               th:value="${profession.name()}"
+                               th:text="${profession.toString()}"
+                               th:selected="${dtoRegister.profession}">
+                       </option>
+                   </select >
+               </div >-->
 
 
             <div class="form-group">

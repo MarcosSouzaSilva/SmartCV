@@ -19,7 +19,7 @@ body {
 
 .input_container.has-error .invalid-feedback {
     display: block; /* Mostra a mensagem de erro */
-    
+
 }
 
 .title_container p {
@@ -170,6 +170,26 @@ body {
     justify-content: center;
     gap: 30px;
     color: #8B8E98;
+}
+
+.back-button {
+    font-size: 18px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo do ícone (pode usar um ícone em forma de seta ou qualquer outro) */
+.back-button:before {
+    content: "←";  /* Usando uma seta simples para representar o ícone */
+    margin-right: 8px;
 }
 
 .separator .line {

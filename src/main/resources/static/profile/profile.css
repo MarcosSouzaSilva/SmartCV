@@ -153,3 +153,21 @@ input[type="radio"] {
 .submit-btn:hover {
     background-color: #45a049;
 }
+
+/* Estilo para o contorno vermelho do campo com erro */
+.is-invalid {
+    border-color: #dc3545; /* Cor de contorno vermelho */
+    background-color: #f8d7da; /* Fundo levemente rosado */
+}
+
+/* Estilo para o texto da mensagem de erro */
+.invalid-feedback {
+    color: #dc3545; /* Cor do texto da mensagem de erro */
+    font-size: 0.875rem; /* Tamanho da fonte menor */
+    margin-top: 0.25rem; /* Espaçamento acima */
+}
+
+/* Estilo para o label quando há erro */
+.has-error label {
+    color: #dc3545; /* Cor vermelha para o label */
+}

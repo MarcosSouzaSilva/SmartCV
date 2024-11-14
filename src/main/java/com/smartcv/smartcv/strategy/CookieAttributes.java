@@ -12,7 +12,7 @@ public class CookieAttributes implements CookiesAttributes {
 
     @Override
     public void setCookieAttributes(Cookie cookie) {
-        cookie.setMaxAge((int) Duration.ofMinutes(10).getSeconds());
+        cookie.setMaxAge((int) Duration.ofMinutes(30).getSeconds());
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setSecure(true);

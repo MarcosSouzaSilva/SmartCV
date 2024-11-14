@@ -5,7 +5,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-//// nao ta funcionando essa classe
 public class ProfessionConverter implements Converter<String, Profession> {
     @Override
     public Profession convert(String source) {

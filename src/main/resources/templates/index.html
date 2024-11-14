@@ -18,17 +18,15 @@
                 <li><a href="#">Pricing</a></li>
                 <li><a href="#">Contact</a></li>
                 <li><a th:href="@{/SmartCV/login}" th:if="${newUsername == null}">Login</a></li>
-                <li><a th:href="@{/SmartCV/register}" th:if="${newUsername == null}">Sign-Up</a></li>
+                <li><a th:href="@{/SmartCV/signUp}" th:if="${newUsername == null}">Sign-Up</a></li>
             </ul>
 
-            <!-- O erro tava aqui paizão, não pode colocar a div "Profile" dentro da ul -->
             <div class="profile" th:if="${newUsername != null}">
                 <a th:href="@{/SmartCV/profile(id=${newUsernameId})}"><img src="https://img.icons8.com/color/48/test-account.png" alt="Avatar" class="avatar"></a>
                 <h1 th:text="${newUsername}"></h1>
                 <p>|</p>
                 <p th:text="${newUserProfession}"></p>
             </div>
-            <!-- Agora tá certinho, só apagar o bagui e ja era -->
         </nav>
     </div>
 </header>
@@ -42,11 +40,11 @@
     <div class="footer-content">
         <div class="footer-left">
             <div class="social-icons">
-              <!--  &lt;!&ndash; Ícones de redes sociais &ndash;&gt;
-                <a href="#" target="_blank"><img src="/path/to/youtube-icon.png" alt="YouTube"></a>
-                <a href="#" target="_blank"><img src="/path/to/instagram-icon.png" alt="Instagram"></a>
-                <a href="#" target="_blank"><img src="/path/to/linkedin-icon.png" alt="LinkedIn"></a>
-                <a href="#" target="_blank"><img src="/path/to/twitter-icon.png" alt="Twitter"></a>-->
+                <!--  &lt;!&ndash; Ícones de redes sociais &ndash;&gt;
+                  <a href="#" target="_blank"><img src="/path/to/youtube-icon.png" alt="YouTube"></a>
+                  <a href="#" target="_blank"><img src="/path/to/instagram-icon.png" alt="Instagram"></a>
+                  <a href="#" target="_blank"><img src="/path/to/linkedin-icon.png" alt="LinkedIn"></a>
+                  <a href="#" target="_blank"><img src="/path/to/twitter-icon.png" alt="Twitter"></a>-->
             </div>
         </div>
         <div class="footer-right">
