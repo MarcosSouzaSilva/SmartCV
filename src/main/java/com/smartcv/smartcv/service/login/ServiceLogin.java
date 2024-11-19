@@ -1,6 +1,6 @@
-package com.smartcv.smartcv.service;
+package com.smartcv.smartcv.service.login;
 
-import com.smartcv.smartcv.dto.LoginDto;
+import com.smartcv.smartcv.dto.LoginDTO;
 import com.smartcv.smartcv.model.Users;
 import com.smartcv.smartcv.repository.UsersRepository;
 import com.smartcv.smartcv.strategy.CookieAttributes;
@@ -35,8 +35,8 @@ public class ServiceLogin {
     @Autowired
     private CookieAttributes cookieAttributes;
 
-    public ModelAndView login(@ModelAttribute("loginDto") LoginDto loginDto) {
-        ModelAndView modelAndView = new ModelAndView("login");
+    public ModelAndView login(@ModelAttribute("loginDto") LoginDTO loginDto) {
+        ModelAndView modelAndView = new ModelAndView("login/login");
 
         modelAndView.addObject("loginDto", loginDto);
 
@@ -44,7 +44,7 @@ public class ServiceLogin {
     }
 
 
-    public ModelAndView sendLogin(@Valid @ModelAttribute("loginDto") LoginDto loginDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ModelAndView sendLogin(@Valid @ModelAttribute("loginDto") LoginDTO loginDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
         ModelAndView mv = new ModelAndView("login");
 
         Users users = loginDto.request();

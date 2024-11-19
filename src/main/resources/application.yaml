@@ -18,24 +18,6 @@ spring:
   jpa:
     open-in-view: false
 
-  spring:
-    security:
-      oauth2:
-        client:
-          registration:
-            google:
-              client-id: 501976807934-c8af4holsjfhehi0t7ecm7nsrtg26njl.apps.googleusercontent.com
-              client-secret: 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
-              scope: profile, email
-              redirect-uri: "{baseUrl}/SmartCV?login/oauth2/code/{registrationId}"  # Padrão do Spring Security para o redirecionamento
-              authorization-grant-type: authorization_code
-              client-name: Google
-          provider:
-            google:
-              authorization-uri: https://accounts.google.com/o/oauth2/auth
-              token-uri: https://oauth2.googleapis.com/token
-              user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
-
     spring:
       thymeleaf:
         cache: false

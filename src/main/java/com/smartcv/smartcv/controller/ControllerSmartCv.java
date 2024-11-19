@@ -1,18 +1,18 @@
 package com.smartcv.smartcv.controller;
 
-import com.smartcv.smartcv.dto.LoginDto;
-import com.smartcv.smartcv.dto.PerfilDto;
-import com.smartcv.smartcv.dto.RegisterDto;
-import com.smartcv.smartcv.service.ServiceIndex;
-import com.smartcv.smartcv.service.ServiceLogin;
-import com.smartcv.smartcv.service.ServicePerfil;
-import com.smartcv.smartcv.service.ServiceRegister;
+import com.smartcv.smartcv.dto.LoginDTO;
+import com.smartcv.smartcv.dto.PerfilDTO;
+import com.smartcv.smartcv.dto.SignUpDTO;
+import com.smartcv.smartcv.dto.PersonalInfoDTO;
+import com.smartcv.smartcv.service.index.ServiceIndex;
+import com.smartcv.smartcv.service.login.ServiceLogin;
+import com.smartcv.smartcv.service.personalInfo.ServicePersonalInfo;
+import com.smartcv.smartcv.service.profile.ServicePerfil;
+import com.smartcv.smartcv.service.signUp.ServiceSignUp;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ import java.io.IOException;
 public class ControllerSmartCv {
 
     @Autowired
-    private ServiceRegister service;
+    private ServiceSignUp service;
 
     @Autowired
     private ServiceIndex serviceIndex;
@@ -36,43 +36,51 @@ public class ControllerSmartCv {
     @Autowired
     private ServicePerfil servicePerfil;
 
+    @Autowired
+    private ServicePersonalInfo servicePersonalInfo;
+
     @GetMapping
     public ModelAndView index(HttpServletRequest request) {
         return serviceIndex.index(request);
     }
 
     @GetMapping("/login")
-    public ModelAndView login(@ModelAttribute("loginDto") LoginDto loginDto) {
+    public ModelAndView login(@ModelAttribute("loginDto") LoginDTO loginDto) {
         return serviceLogin.login(loginDto);
     }
 
+    @GetMapping("/personalInfo")
+    public ModelAndView login(@ModelAttribute("loginDto") PersonalInfoDTO infoDTO) {
+        return servicePersonalInfo.page(infoDTO);
+    }
+
     @GetMapping("/signUp")
-    public ModelAndView signUp(@ModelAttribute("dtoRegister") RegisterDto dto) {
+    public ModelAndView signUp(@ModelAttribute("dtoRegister") SignUpDTO dto) {
         return service.signUpPage(dto);
     }
 
     @GetMapping("/profiles")
-    public ModelAndView perfil(@ModelAttribute("dtoRegister") PerfilDto dto) {
+    public ModelAndView perfil(@ModelAttribute("dtoRegister") PerfilDTO dto) {
         return servicePerfil.page(dto);
     }
 
     @PostMapping("/signUp")
-    public ModelAndView register(@Valid @ModelAttribute("dtoRegister") RegisterDto dtoRegister, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ModelAndView register(@Valid @ModelAttribute("dtoRegister") SignUpDTO dtoRegister, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
         return service.signUp(dtoRegister, bindingResult, request, response);
     }
 
     @PostMapping("/login")
-    public ModelAndView loginSend(@Valid @ModelAttribute("loginDto") LoginDto loginDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ModelAndView loginSend(@Valid @ModelAttribute("loginDto") LoginDTO loginDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
         return serviceLogin.sendLogin(loginDto, bindingResult, request, response);
     }
 
     @GetMapping("/profile")
-    public ModelAndView perfil(@RequestParam(name = "id") String id, @ModelAttribute("perfilDto") PerfilDto perfilDto, HttpServletRequest request) {
+    public ModelAndView perfil(@RequestParam(name = "id") String id, @ModelAttribute("perfilDto") PerfilDTO perfilDto, HttpServletRequest request) {
         return servicePerfil.pageAndInfo(id, perfilDto, request);
     }
 
     @PostMapping("/profile")
-    public ModelAndView update(@Valid @ModelAttribute("perfilDto") PerfilDto perfilDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ModelAndView update(@Valid @ModelAttribute("perfilDto") PerfilDTO perfilDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
         return servicePerfil.update(perfilDto, bindingResult, request, response);
     }
 

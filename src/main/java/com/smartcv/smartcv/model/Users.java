@@ -1,9 +1,10 @@
 package com.smartcv.smartcv.model;
 
-import com.smartcv.smartcv.dto.Profession;
+import com.smartcv.smartcv.dto.enums.Profession;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -23,6 +24,12 @@ public class Users {
 
     private String password;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private PersonalInfo personalInfo;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Education> educations;
+
     @Enumerated(EnumType.STRING) // quando salvo no banco de dados vai salvar como string
     private Profession profession;
 
@@ -30,12 +37,30 @@ public class Users {
         this.id = UUID.randomUUID().toString();
     }
 
-    public Users(String id, String username, String email, String password, Profession profession) {
+    public Users(String id, String username, String email, String password, PersonalInfo personalInfo, List<Education> educations, Profession profession) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.personalInfo = personalInfo;
+        this.educations = educations;
         this.profession = profession;
+    }
+
+    public PersonalInfo getPersonalInfo() {
+        return personalInfo;
+    }
+
+    public void setPersonalInfo(PersonalInfo personalInfo) {
+        this.personalInfo = personalInfo;
+    }
+
+    public List<Education> getEducations() {
+        return educations;
+    }
+
+    public void setEducations(List<Education> educations) {
+        this.educations = educations;
     }
 
     public String getId() {

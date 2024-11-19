@@ -1,10 +1,11 @@
 package com.smartcv.smartcv.dto;
 
+import com.smartcv.smartcv.dto.enums.Profession;
 import com.smartcv.smartcv.model.Users;
 
 
 
-public class LoginDto {
+public class LoginDTO {
 
     private String username;
 
@@ -14,10 +15,10 @@ public class LoginDto {
 
     private Profession profession;
 
-    public LoginDto() {
+    public LoginDTO() {
     }
 
-    public LoginDto(String email, String password, Profession profession) {
+    public LoginDTO(String email, String password, Profession profession) {
         this.email = email;
         this.password = password;
         this.profession = profession;

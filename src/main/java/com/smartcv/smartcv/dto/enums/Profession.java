@@ -1,4 +1,4 @@
-package com.smartcv.smartcv.dto;
+package com.smartcv.smartcv.dto.enums;
 
 public enum Profession {
 

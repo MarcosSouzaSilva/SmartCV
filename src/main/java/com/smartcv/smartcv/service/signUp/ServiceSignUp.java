@@ -1,7 +1,7 @@
-package com.smartcv.smartcv.service;
+package com.smartcv.smartcv.service.signUp;
 
-import com.smartcv.smartcv.dto.Profession;
-import com.smartcv.smartcv.dto.RegisterDto;
+import com.smartcv.smartcv.dto.enums.Profession;
+import com.smartcv.smartcv.dto.SignUpDTO;
 import com.smartcv.smartcv.model.Users;
 import com.smartcv.smartcv.repository.UsersRepository;
 import com.smartcv.smartcv.strategy.CookieAttributes;
@@ -21,7 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 
 @Service
-public class ServiceRegister {
+public class ServiceSignUp {
 
     @Autowired
     private EmailValid emailValid;
@@ -39,9 +39,9 @@ public class ServiceRegister {
     private IsInvalidPassword isInvalidPassword;
 
 
-    public ModelAndView signUpPage(@ModelAttribute("dtoRegister") RegisterDto dto) {
+    public ModelAndView signUpPage(@ModelAttribute("dtoRegister") SignUpDTO dto) {
 
-        ModelAndView view = new ModelAndView("signUp");
+        ModelAndView view = new ModelAndView("signUp/signUp");
 
         view.addObject("dtoRegister", dto);
         view.addObject("listaStatusUser", Profession.values());
@@ -49,7 +49,7 @@ public class ServiceRegister {
         return view;
     }
 
-    public ModelAndView signUp(@Valid @ModelAttribute("dtoRegister") RegisterDto registerDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ModelAndView signUp(@Valid @ModelAttribute("dtoRegister") SignUpDTO registerDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
         ModelAndView mv = new ModelAndView("signUp");
 
         Users users = registerDto.request();
@@ -97,15 +97,10 @@ public class ServiceRegister {
                 try {
 
                     users.setPassword(securityConfig.encode(users.getPassword()));
-
-
+                    
                     this.repository.save(users);
 
                     var user = repository.findByEmailAndPassword(users.getEmail(), users.getPassword()).get();
-
-                    System.err.println("emailInvalid: " + emailInvalid);
-                    System.err.println("passwordInvalid: " + passwordInvalid);
-                    System.err.println("emailExiste.isPresent(): " + emailExiste.isPresent());
 
 
                     request.getSession().setAttribute("username", user.getUsername());

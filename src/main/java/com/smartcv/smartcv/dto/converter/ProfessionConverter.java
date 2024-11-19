@@ -1,6 +1,6 @@
 package com.smartcv.smartcv.dto.converter;
 
-import com.smartcv.smartcv.dto.Profession;
+import com.smartcv.smartcv.dto.enums.Profession;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

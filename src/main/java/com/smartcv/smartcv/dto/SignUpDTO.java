@@ -1,10 +1,9 @@
 package com.smartcv.smartcv.dto;
 
+import com.smartcv.smartcv.dto.enums.Profession;
 import com.smartcv.smartcv.model.Users;
 
-import java.util.Objects;
-
-public class RegisterDto {
+public class SignUpDTO {
 
     private String username;
 
@@ -14,7 +13,7 @@ public class RegisterDto {
 
     private Profession profession;
 
-    public RegisterDto() {
+    public SignUpDTO() {
     }
 
     public String getUsername() {

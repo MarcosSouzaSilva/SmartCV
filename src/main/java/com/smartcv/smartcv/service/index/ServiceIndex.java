@@ -1,6 +1,6 @@
-package com.smartcv.smartcv.service;
+package com.smartcv.smartcv.service.index;
 
-import com.smartcv.smartcv.dto.Profession;
+import com.smartcv.smartcv.dto.enums.Profession;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ public class ServiceIndex {
 
 
     public ModelAndView index(HttpServletRequest request) {
-        ModelAndView modelAndView = new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView("index/index");
 
         String username = null;
         String id = null;

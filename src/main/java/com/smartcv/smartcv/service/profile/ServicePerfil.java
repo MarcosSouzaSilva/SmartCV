@@ -1,9 +1,8 @@
-package com.smartcv.smartcv.service;
+package com.smartcv.smartcv.service.profile;
 
 
-import com.smartcv.smartcv.dto.PerfilDto;
-import com.smartcv.smartcv.dto.Profession;
-import com.smartcv.smartcv.dto.RegisterDto;
+import com.smartcv.smartcv.dto.PerfilDTO;
+import com.smartcv.smartcv.dto.enums.Profession;
 import com.smartcv.smartcv.model.Users;
 import com.smartcv.smartcv.repository.UsersRepository;
 import com.smartcv.smartcv.strategy.CookieAttributes;
@@ -33,8 +32,8 @@ public class ServicePerfil {
     @Autowired
     private CookieAttributes cookieAttributes;
 
-    public ModelAndView page(@ModelAttribute("dtoRegister") PerfilDto dto) {
-        ModelAndView mv = new ModelAndView("profile");
+    public ModelAndView page(@ModelAttribute("dtoRegister") PerfilDTO dto) {
+        ModelAndView mv = new ModelAndView("profile/profile");
 
         mv.addObject("perfilDto", dto);
         mv.addObject("listaStatusUser", Profession.values());
@@ -42,8 +41,9 @@ public class ServicePerfil {
         return mv;
     }
 
-    public ModelAndView pageAndInfo(@RequestParam(name = "id") String id, @ModelAttribute("perfilDto") PerfilDto perfilDto, HttpServletRequest request) {
-        ModelAndView mv = new ModelAndView("profile");
+    public ModelAndView pageAndInfo(@RequestParam(name = "id") String id, @ModelAttribute("perfilDto") PerfilDTO perfilDto, HttpServletRequest request) {
+        ModelAndView mv = new ModelAndView("profile/profile");
+
 
         var optionalCadastro = repository.findById(id);
 
@@ -52,14 +52,9 @@ public class ServicePerfil {
         String newUsername = (String) request.getSession().getAttribute("username");
         String newUsernameProfession = (String) request.getSession().getAttribute("profession");
 
-        var infoForUserNull = newUsernameId == null && newUsername == null && newUsernameProfession == null;
+        var infoForUserNull = newUsernameId == null && newUsername == null && newUsernameProfession == null && !userIdFromSession.equals(id) ;
 
         if (infoForUserNull) {
-            System.err.println("Usuário não está logado. Redirecionando para a página inicial.");
-            return new ModelAndView("redirect:/SmartCV");
-        }
-
-        if (newUsernameId == null || !userIdFromSession.equals(id)) {
             System.err.println("User is not logged in. Redirecting to the home page.");
             return new ModelAndView("redirect:/SmartCV/login");
         }
@@ -67,6 +62,9 @@ public class ServicePerfil {
         if (optionalCadastro.isPresent()) {
 
             Users user = optionalCadastro.get();
+
+            mv.addObject("listaStatusUser", Profession.values());
+            mv.addObject("selectedProfession", user.getProfession());
 
             perfilDto.fromDtoCadastro(user);
 
@@ -76,12 +74,12 @@ public class ServicePerfil {
             mv.addObject("newUsernameProfession", newUsernameProfession);
 
         } else {
-            System.err.println("Id não encontrado no banco");
+            System.err.println("Id not found");
         }
         return mv;
     }
 
-    public ModelAndView update(@Valid @ModelAttribute("perfilDto") PerfilDto dto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ModelAndView update(@Valid @ModelAttribute("perfilDto") PerfilDTO dto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
         ModelAndView mv = new ModelAndView("profile");
 
         Users users = dto.request();
@@ -92,11 +90,15 @@ public class ServicePerfil {
 
         if (bindingResult.hasErrors()) {
             System.err.println("There was a bindingResult error");
+            mv.addObject("listaStatusUser", Profession.values());
+            mv.addObject("selectedProfession", users.getProfession());
             return mv;
         }
 
         if (!invalidEmail) {
             bindingResult.rejectValue("email", "error.perfilDto", "Invalid email!");
+            mv.addObject("listaStatusUser", Profession.values());
+            mv.addObject("selectedProfession", users.getProfession());
             return mv;
         }
 
@@ -121,6 +123,8 @@ public class ServicePerfil {
 
                 if (!user.getEmail().equals(users.getEmail()) && repository.findByEmail(users.getEmail()).isPresent()) {
                     bindingResult.rejectValue("email", "error.perfilDto", "The email already exists");
+                    mv.addObject("listaStatusUser", Profession.values());
+                    mv.addObject("selectedProfession", users.getProfession());
                     return mv;
                 }
 
@@ -136,21 +140,32 @@ public class ServicePerfil {
                     update = true;
                 }
 
+                if (!user.getProfession().equals(users.getProfession())) {
+                    user.setProfession(users.getProfession());
+                    update = true;
+                }
+
                 if (update) {
 
                     repository.save(user);
 
                     request.getSession().setAttribute("username", user.getUsername());
+                    request.getSession().setAttribute("profession", user.getProfession().name());
                     request.getSession().setAttribute("id", user.getId());
 
                     Cookie userCookie = new Cookie("username", user.getUsername());
                     cookieAttributes.setCookieAttributes(userCookie);
+
+                    Cookie professionCookie = new Cookie("profession", user.getProfession().name());
+                    cookieAttributes.setCookieAttributes(professionCookie);
+
 
                     Cookie idCookie = new Cookie("id", user.getId());
                     cookieAttributes.setCookieAttributes(idCookie);
 
                     response.addCookie(idCookie);
                     response.addCookie(userCookie);
+                    response.addCookie(professionCookie);
 
                     return new ModelAndView("redirect:/SmartCV");
                 }
