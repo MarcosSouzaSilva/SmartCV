@@ -159,7 +159,6 @@ public class ServicePerfil {
                     Cookie professionCookie = new Cookie("profession", user.getProfession().name());
                     cookieAttributes.setCookieAttributes(professionCookie);
 
-
                     Cookie idCookie = new Cookie("id", user.getId());
                     cookieAttributes.setCookieAttributes(idCookie);
 

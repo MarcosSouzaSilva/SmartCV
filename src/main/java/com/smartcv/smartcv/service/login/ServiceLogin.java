@@ -45,7 +45,7 @@ public class ServiceLogin {
 
 
     public ModelAndView sendLogin(@Valid @ModelAttribute("loginDto") LoginDTO loginDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        ModelAndView mv = new ModelAndView("login");
+        ModelAndView mv = new ModelAndView("login/login");
 
         Users users = loginDto.request();
 
@@ -84,21 +84,26 @@ public class ServiceLogin {
                 try {
 
                     request.getSession().setAttribute("username", user.getUsername());
-                    request.getSession().setAttribute("profession", user.getProfession().name());
                     request.getSession().setAttribute("id", user.getId());
+                    request.getSession().setAttribute("profession", user.getProfession().name());
 
                     Cookie userCookie = new Cookie("username", user.getUsername());
                     cookieAttributes.setCookieAttributes(userCookie);
 
-                    Cookie userCookieProfession = new Cookie("profession", user.getProfession().name());
-                    cookieAttributes.setCookieAttributes(userCookieProfession);
+                    Cookie professionCookie = new Cookie("profession", user.getProfession().name());
+                    cookieAttributes.setCookieAttributes(professionCookie);
+                    System.err.println("1");
 
                     Cookie userCookieId = new Cookie("id", user.getId());
                     cookieAttributes.setCookieAttributes(userCookieId);
 
+                    System.err.println("2");
+
                     response.addCookie(userCookie);
                     response.addCookie(userCookieId);
-                    response.addCookie(userCookieProfession);
+                    response.addCookie(professionCookie);
+
+                    System.err.println("12");
 
                     return new ModelAndView("redirect:/SmartCV");
 
@@ -110,6 +115,9 @@ public class ServiceLogin {
                 bindingResult.rejectValue("password", "error.loginDto", "User or password invalid, try again.");
                 return mv;
             }
+        } else {
+            bindingResult.rejectValue("email", "error.loginDto", "This email doesn't match any account.");
+            bindingResult.rejectValue("email", "error.loginDto", " Please try again or create a new account.");
         }
         return mv;
     }

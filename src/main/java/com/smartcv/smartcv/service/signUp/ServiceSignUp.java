@@ -50,7 +50,7 @@ public class ServiceSignUp {
     }
 
     public ModelAndView signUp(@Valid @ModelAttribute("dtoRegister") SignUpDTO registerDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        ModelAndView mv = new ModelAndView("signUp");
+        ModelAndView mv = new ModelAndView("signUp/signUp");
 
         Users users = registerDto.request();
 
@@ -58,9 +58,7 @@ public class ServiceSignUp {
 
         var passwordInvalid = isInvalidPassword.validation(users);
 
-        var emailExiste = repository.findByEmail(users.getEmail());
-
-        var verificationIfEmailExist = repository.findByEmailAndPassword(users.getEmail(), users.getPassword());
+        var emailExist = repository.findByEmail(users.getEmail());
 
         var userIsNotNull = users.getUsername() != null && users.getEmail() != null && users.getPassword() != null && users.getProfession() != null;
 
@@ -69,18 +67,16 @@ public class ServiceSignUp {
             mv.addObject("selectedProfession", registerDto.getProfession());
             return mv;
 
-        } else if (emailExiste.isPresent()) {
+        } else if (emailExist.isPresent()) {
             bindingResult.rejectValue("email", "error.dtoRegister", "There is already a user with the email !");
             mv.addObject("listaStatusUser", Profession.values());
             mv.addObject("selectedProfession", registerDto.getProfession());
-            System.err.println("2");
             return mv;
 
         } else if (!emailInvalid) {
             bindingResult.rejectValue("email", "error.dtoRegister", "Email Invalid !");
             mv.addObject("listaStatusUser", Profession.values());
             mv.addObject("selectedProfession", registerDto.getProfession());
-            System.err.println("3");
             return mv;
 
         } else if (passwordInvalid) {
@@ -88,20 +84,19 @@ public class ServiceSignUp {
             bindingResult.rejectValue("password", "error.loginDto", "☑ Supper and lower case letters and symbols");
             mv.addObject("listaStatusUser", Profession.values());
             mv.addObject("selectedProfession", registerDto.getProfession());
-            System.err.println("4");
             return mv;
 
-        } else if (userIsNotNull){
+        } else if (userIsNotNull) {
 
-            if (verificationIfEmailExist.isEmpty()) {
+        } else {
+
                 try {
 
                     users.setPassword(securityConfig.encode(users.getPassword()));
-                    
+
                     this.repository.save(users);
 
-                    var user = repository.findByEmailAndPassword(users.getEmail(), users.getPassword()).get();
-
+                    var user = repository.findById(users.getId()).get();
 
                     request.getSession().setAttribute("username", user.getUsername());
                     request.getSession().setAttribute("id", user.getId());
@@ -122,13 +117,11 @@ public class ServiceSignUp {
 
                     return new ModelAndView("redirect:/SmartCV");
 
-
                 } catch (Exception e) {
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred, try it again");
                     return null;
                 }
             }
-        }
         return mv;
     }
 }
