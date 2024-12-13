@@ -1,23 +1,16 @@
 package com.smartcv.smartcv.dto;
 
 import com.smartcv.smartcv.dto.enums.EuaStates;
-import com.smartcv.smartcv.dto.enums.Gender;
-import com.smartcv.smartcv.dto.enums.MaritalStatus;
+import com.smartcv.smartcv.dto.enums.Seniority;
 import com.smartcv.smartcv.model.PersonalInfo;
-import com.smartcv.smartcv.model.Users;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotNull;
 
 public class PersonalInfoDTO {
 
-    private String fullName; // Nome completo
+    private String full_Name; // Nome completo
 
-    private int age; // Idade (em anos)
-
-    private boolean hasChildren; // Tem Filho(s)?
+    private Integer age; // Idade (em anos)
 
     private String address; // Endereço
 
@@ -25,10 +18,7 @@ public class PersonalInfoDTO {
     private EuaStates eua_states;
 
     @Enumerated(EnumType.STRING)
-    private Gender gender;
-
-    @Enumerated(EnumType.STRING)
-    private MaritalStatus maritalStatus;
+    private Seniority seniority;
 
     private String city; // Cidade
 
@@ -39,44 +29,28 @@ public class PersonalInfoDTO {
     private String email; // E-Mail
 
 
-    public String getFullName() {
-        return fullName;
+    public String getFull_Name() {
+        return full_Name;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFull_Name(String full_Name) {
+        this.full_Name = full_Name;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
-    public Gender getGender() {
-        return gender;
+    public Seniority getSeniority() {
+        return seniority;
     }
 
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public MaritalStatus getMaritalStatus() {
-        return maritalStatus;
-    }
-
-    public void setMaritalStatus(MaritalStatus maritalStatus) {
-        this.maritalStatus = maritalStatus;
-    }
-
-    public boolean isHasChildren() {
-        return hasChildren;
-    }
-
-    public void setHasChildren(boolean hasChildren) {
-        this.hasChildren = hasChildren;
+    public void setSeniority(Seniority seniority) {
+        this.seniority = seniority;
     }
 
     public String getAddress() {
@@ -131,11 +105,8 @@ public class PersonalInfoDTO {
 
         PersonalInfo personalInfo = new PersonalInfo();
 
-        personalInfo.setFullName(this.fullName);
-        personalInfo.setGender(this.gender);
+        personalInfo.setFull_Name(this.full_Name);
         personalInfo.setAge(this.age);
-        personalInfo.setMaritalStatus(this.maritalStatus);
-        personalInfo.setHasChildren(this.hasChildren);
         personalInfo.setAddress(this.address);
         personalInfo.setEua_states(this.eua_states);
         personalInfo.setCity(this.city);
@@ -150,11 +121,9 @@ public class PersonalInfoDTO {
     @Override
     public String toString() {
         return "PersonalInfoDTO{" +
-                "fullName='" + fullName + '\'' +
-                ", gender='" + gender + '\'' +
+                "fullName='" + full_Name + '\'' +
+                ", gender='" + seniority + '\'' +
                 ", age=" + age +
-                ", maritalStatus='" + maritalStatus + '\'' +
-                ", hasChildren=" + hasChildren +
                 ", address='" + address + '\'' +
                 ", state='" + eua_states + '\'' +
                 ", city='" + city + '\'' +

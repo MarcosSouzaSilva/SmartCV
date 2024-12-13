@@ -3,7 +3,7 @@ package com.smartcv.smartcv.dto;
 import com.smartcv.smartcv.dto.enums.Profession;
 import com.smartcv.smartcv.model.Users;
 
-public class PerfilDTO {
+public class ProfileDTO {
 
     private String username;
 
@@ -11,7 +11,7 @@ public class PerfilDTO {
 
     private Profession profession;
 
-    public PerfilDTO() {
+    public ProfileDTO() {
     }
 
 

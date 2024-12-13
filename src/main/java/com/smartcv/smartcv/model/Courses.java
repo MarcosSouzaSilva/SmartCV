@@ -6,7 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 import java.util.UUID;
 
 @Entity
-public class Education {
+public class Courses {
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -20,15 +20,17 @@ public class Education {
 
     private Integer graduation_year; // Ano de Conclusão
 
+    private String moth; // Ano de Conclusão
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Users user;
 
-    public Education(String id) {
+    public Courses(String id) {
         this.id = UUID.randomUUID().toString();
     }
 
-    public Education() {
+    public Courses() {
 
     }
 
@@ -40,6 +42,13 @@ public class Education {
         this.user = user;
     }
 
+    public String getMoth() {
+        return moth;
+    }
+
+    public void setMoth(String moth) {
+        this.moth = moth;
+    }
 
     public String getId() {
         return id;

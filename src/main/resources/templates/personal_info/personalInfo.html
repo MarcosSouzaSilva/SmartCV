@@ -29,29 +29,23 @@
 
             <div class="form-row">
                 <label for="fullName">Full Name</label>
-                <input type="text" th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid' : ''"
-                       th:field="*{fullName}" id="fullName" name="fullName">
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+                <input type="text" th:classappend="${#fields.hasErrors('full_Name')} ? 'is-invalid' : ''"
+                       th:field="*{full_Name}" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('full_Name')}" th:errors="*{full_Name}"></div>
             </div>
 
             <div class="form-row">
                 <label for="address">Address</label>
                 <input type="text" th:classappend="${#fields.hasErrors('address')} ? 'is-invalid' : ''"
-                       th:field="*{address}" placeholder="e.g., 1600 Pennsylvania Ave NW" id="address" name="address">
+                       th:field="*{address}" id="address" name="address" placeholder="Enter your address" required>
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
             </div>
 
             <div class="form-row">
                 <label for="email">Email</label>
-                <input type="email" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" th:field="*{email}" id="email" name="email">
+                <input type="email" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                       th:field="*{email}" id="email" name="email" placeholder="Enter your email address" required>
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
-            </div>
-
-            <div class="form-row">
-                <label for="hasChildren">Has Children</label>
-                <input type="text" th:classappend="${#fields.hasErrors('hasChildren')} ? 'is-invalid' : ''"
-                       th:field="*{hasChildren}" id="hasChildren" name="hasChildren">
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('hasChildren')}" th:errors="*{hasChildren}"></div>
             </div>
 
             <div class="form-row">
@@ -59,19 +53,19 @@
                 <select id="state" name="eua_states">
                     <option th:each="eua_states : ${eua_statesList}"
                             th:value="${eua_states.name()}"
-                            th:text="${eua_states.name().replace('_', ' ')}"
+                            th:text="${eua_states.name}"
                             th:selected="${eua_states} == ${selectedState}">
                     </option>
                 </select>
             </div>
 
             <div class="form-row">
-                <label for="gender">Gender</label>
-                <select id="gender" name="gender">
-                    <option th:each="gender : ${genderList}"
-                            th:value="${gender.name()}"
-                            th:text="${gender.name().replace('_', ' ')}"
-                            th:selected="${gender} == ${selectedState}">
+                <label for="seniority">Seniority</label>
+                <select id="seniority" name="seniority">
+                    <option th:each="seniority : ${seniorityList}"
+                            th:value="${seniority}"
+                            th:text="${seniority.displayName}"
+                            th:selected="${seniority} == ${selectedState}">
                     </option>
                 </select>
             </div>
@@ -79,38 +73,27 @@
             <div class="form-row">
                 <label for="phone1">Phone 1</label>
                 <input type="tel" id="phone1" th:classappend="${#fields.hasErrors('phone1')} ? 'is-invalid' : ''"
-                       th:field="*{phone1}" name="phone1">
+                       th:field="*{phone1}" name="phone1" placeholder="Enter your primary phone number" required>
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('phone1')}" th:errors="*{phone1}"></div>
-            </div>
-
-            <div class="form-row">
-                <label for="maritalStatus">Marital Status</label>
-                <select id="maritalStatus" name="maritalStatus">
-                    <option th:each="maritalStatus : ${maritalStatusList}"
-                            th:value="${maritalStatus.name()}"
-                            th:text="${maritalStatus.name().replace('_', ' ')}"
-                            th:selected="${maritalStatus} == ${selectedState}">
-                    </option>
-                </select>
-            </div>
-
-            <div class="form-row">
-                <label for="city">City</label>
-                <input type="text" th:field="*{city}" id="city" name="city">
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
             </div>
 
             <div class="form-row">
                 <label for="phone2">Phone 2</label>
                 <input type="tel" th:classappend="${#fields.hasErrors('phone2')} ? 'is-invalid' : ''"
-                       th:field="*{phone2}" id="phone2" name="phone2">
+                       th:field="*{phone2}" id="phone2" name="phone2" placeholder="Enter your secondary phone number (optional)" required>
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('phone2')}" th:errors="*{phone2}"></div>
             </div>
 
             <div class="form-row">
+                <label for="city">City</label>
+                <input type="text" th:field="*{city}" id="city" name="city" placeholder="Enter your city" required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
+            </div>
+
+            <div class="form-row">
                 <label for="age">Age</label>
-                <input type="tel" th:classappend="${#fields.hasErrors('age')} ? 'is-invalid' : ''" th:field="*{age}"
-                       id="age" name="age">
+                <input type="number" th:classappend="${#fields.hasErrors('age')} ? 'is-invalid' : ''"
+                       th:field="*{age}" id="age" name="age" placeholder="Enter your age" required>
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>
             </div>
 
@@ -121,5 +104,24 @@
         </form>
     </div>
 </main>
+
+<script>
+
+    // Evento para garantir que o valor de idade não começa com zero
+    document.getElementById('age').addEventListener('input', function () {
+        const input = this;
+        // Remover o zero inicial caso o usuário comece a digitar um número
+        if (input.value.startsWith('0') && input.value.length > 1) {
+            input.value = input.value.substring(1);
+        }
+    });
+
+    // Outros eventos
+    document.querySelector('.btn.back').addEventListener('click', function () {
+        window.history.back();
+    });
+
+</script>
+
 </body>
 </html>

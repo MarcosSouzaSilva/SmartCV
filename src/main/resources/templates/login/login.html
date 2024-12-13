@@ -57,7 +57,7 @@
                 <path fill="#4285f4" d="M48 48L17 24l-4-3 35-10z"></path>
             </g>
         </svg>
-        <span>Sign In with Google</span>
+        <a href="/SmartCV/userProfile">Sign In with Google</a>
     </button>
     <button title="Sign In" type="submit" class="sign-in_apl">
         <svg preserveAspectRatio="xMidYMid" version="1.1" viewBox="0 0 256 315" height="20px" width="16px" xmlns="http://www.w3.org/2000/svg">
@@ -76,6 +76,18 @@
     function goBack() {
         window.history.back();
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const termsElement = document.querySelector('.note');
+
+        if (termsElement) {
+            termsElement.style.cursor = 'pointer'; // Indica que o elemento é clicável
+            termsElement.addEventListener('click', () => {
+                window.location.href = '/SmartCV/terms&Conditions'; // Substitua pelo URL da sua página de termos
+            });
+        }
+    });
+
 </script>
 
 </body>

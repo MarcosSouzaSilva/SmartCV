@@ -1,8 +1,6 @@
 package com.smartcv.smartcv.model;
 
 import com.smartcv.smartcv.dto.enums.EuaStates;
-import com.smartcv.smartcv.dto.enums.Gender;
-import com.smartcv.smartcv.dto.enums.MaritalStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.GenericGenerator;
@@ -19,13 +17,10 @@ public class PersonalInfo {
     private String id;
 
     @NotNull(message = "The full name cannot be null. Please provide your name.")
-    private String fullName; // Nome completo
+    private String full_Name; // Nome completo
 
     @NotNull(message = "Age cannot be null. Please enter your age.")
     private Integer age; // Idade
-
-    @NotNull(message = "You must specify if you have children. Please answer yes or no.")
-    private boolean hasChildren; // Tem Filho(s)?
 
     @NotNull(message = "The address cannot be null. Please provide your address.")
     private String address; // Endereço
@@ -33,14 +28,6 @@ public class PersonalInfo {
     @NotNull(message = "The state cannot be null. Please select a valid state.")
     @Enumerated(EnumType.STRING)
     private EuaStates eua_states; // Estados (USA)
-
-    @NotNull(message = "Gender cannot be null. Please select your gender.")
-    @Enumerated(EnumType.STRING)
-    private Gender gender; // Gênero
-
-    @NotNull(message = "Marital status cannot be null. Please provide your marital status.")
-    @Enumerated(EnumType.STRING)
-    private MaritalStatus maritalStatus; // Estado civil
 
     @NotNull(message = "The city cannot be null. Please provide your city.")
     private String city; // Cidade
@@ -82,12 +69,12 @@ public class PersonalInfo {
         this.id = id;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getFull_Name() {
+        return full_Name;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFull_Name(String fullName) {
+        this.full_Name = fullName;
     }
 
     public int getAge() {
@@ -96,30 +83,6 @@ public class PersonalInfo {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public MaritalStatus getMaritalStatus() {
-        return maritalStatus;
-    }
-
-    public void setMaritalStatus(MaritalStatus maritalStatus) {
-        this.maritalStatus = maritalStatus;
-    }
-
-    public boolean isHasChildren() {
-        return hasChildren;
-    }
-
-    public void setHasChildren(boolean hasChildren) {
-        this.hasChildren = hasChildren;
     }
 
     public String getAddress() {
@@ -173,11 +136,8 @@ public class PersonalInfo {
     @Override
     public String toString() {
         return "PersonalInfoDTO{" +
-                "fullName='" + fullName + '\'' +
-                ", gender='" + gender + '\'' +
+                "fullName='" + full_Name + '\'' +
                 ", age=" + age +
-                ", maritalStatus='" + maritalStatus + '\'' +
-                ", hasChildren=" + hasChildren +
                 ", address='" + address + '\'' +
                 ", state='" + eua_states + '\'' +
                 ", city='" + city + '\'' +

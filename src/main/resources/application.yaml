@@ -1,30 +1,49 @@
 spring:
   datasource:
+    # URL de conexão com o banco de dados MySQL
     url: jdbc:mysql://localhost:3306/smart
+    # Nome de usuário para conectar ao MySQL
     username: root
-    password: marcossouza144
+    # Senha para conectar ao MySQL
+    password: ${PASSWORD_DATABASE}
+    # Driver JDBC para MySQL
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 10
-      minimum-idle: 5
-    jpa:
-      hibernate:
-        ddl-auto: update
-      show-sql: false
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.MySQL8Dialect
+      # Configurações do pool de conexões (HikariCP)
+      maximum-pool-size: 10 # Número máximo de conexões no pool
+      minimum-idle: 5       # Número mínimo de conexões ociosas no pool
 
   jpa:
-    open-in-view: false
+    hibernate:
+      ddl-auto: update      # Configuração para gerar o banco de dados automaticamente
+      # 'update' aplica alterações no banco sem perder dados
+    show-sql: false         # Não mostrar SQL gerado no console
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect # Dialeto do Hibernate para MySQL 8
+    open-in-view: false     # Desabilita a abertura de sessões Hibernate em views, evitando problemas de performance
 
-    spring:
-      thymeleaf:
-        cache: false
+  thymeleaf:
+    cache: false             # Desativa o cache de templates no Thymeleaf, útil para desenvolvimento
 
-        spring:
-          jpa:
-            properties:
-              hibernate:
-                show_sql: true
-                format_sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            # Configurações para autenticação via Google
+            client-id: ${GOOGLE_ID}  # ID do cliente Google
+            client-secret: ${GOOGLE_SECRET}  # Segredo do cliente Google
+
+            scope:
+              - email
+              - profile
+
+
+server:
+  servlet:
+    session:
+      cookie:
+        secure: false # Ou false se não estiver usando HTTPS (não recomendado em produção)
+        http-only: true
+        same-site: lax
