@@ -11,7 +11,7 @@ import java.net.URL;
 
 public class Test {
 
-    private static final String API_KEY = "${SUA_CHAVE}";
+    /*private static final String API_KEY = "${SUA_CHAVE}";
 
     public static void main(String[] args) {
         System.out.println(chatGPT("hello, how are you?"));
@@ -61,5 +61,5 @@ public class Test {
         int startMarker = response.indexOf("content")+11; // Marker for where the content starts.
         int endMarker = response.indexOf("\"", startMarker); // Marker for where the content ends.
         return response.substring(startMarker, endMarker); // Returns the substring containing only the response.
-    }
+    }*/
 }

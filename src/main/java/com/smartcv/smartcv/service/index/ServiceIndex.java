@@ -55,7 +55,6 @@ public class ServiceIndex {
                 modelAndView.addObject("newUserProfession", Profession.valueOf(profession));
                 modelAndView.addObject("newUsernameId", id);
             }
-
             return modelAndView;
         }
         return modelAndView;
