@@ -50,8 +50,13 @@ public class ControllerSmartCv {
     }
 
     @GetMapping("/personalInfo")
-    public ModelAndView login(@ModelAttribute("loginDto") PersonalInfoDTO infoDTO) {
+    public ModelAndView personalInfo(@ModelAttribute("loginDto") PersonalInfoDTO infoDTO) {
         return servicePersonalInfo.page(infoDTO);
+    }
+
+    @PostMapping("/personalInfo")
+    public ModelAndView personalInfo(@ModelAttribute("loginDto") PersonalInfoDTO infoDTO, BindingResult bindingResult, HttpServletRequest request) {
+        return servicePersonalInfo.send(infoDTO, bindingResult, request);
     }
 
     @GetMapping("/signUp")

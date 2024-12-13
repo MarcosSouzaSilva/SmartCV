@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/smartCv
+    url: jdbc:mysql://localhost:3306/smart
     username: root
     password: marcossouza144
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -21,3 +21,10 @@ spring:
     spring:
       thymeleaf:
         cache: false
+
+        spring:
+          jpa:
+            properties:
+              hibernate:
+                show_sql: true
+                format_sql: true

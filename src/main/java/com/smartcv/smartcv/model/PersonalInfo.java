@@ -4,6 +4,7 @@ import com.smartcv.smartcv.dto.enums.EuaStates;
 import com.smartcv.smartcv.dto.enums.Gender;
 import com.smartcv.smartcv.dto.enums.MaritalStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
@@ -17,30 +18,45 @@ public class PersonalInfo {
     @Column(name = "id", columnDefinition = "CHAR(36)")
     private String id;
 
+    @NotNull(message = "The full name cannot be null. Please provide your name.")
     private String fullName; // Nome completo
 
-    private Gender gender; // Sexo
+    @NotNull(message = "Age cannot be null. Please enter your age.")
+    private Integer age; // Idade
 
-    private int age; // Idade (em anos)
-
-    private MaritalStatus maritalStatus; // Estado Civil
-
+    @NotNull(message = "You must specify if you have children. Please answer yes or no.")
     private boolean hasChildren; // Tem Filho(s)?
 
+    @NotNull(message = "The address cannot be null. Please provide your address.")
     private String address; // Endereço
 
-    private EuaStates state; // Estado
+    @NotNull(message = "The state cannot be null. Please select a valid state.")
+    @Enumerated(EnumType.STRING)
+    private EuaStates eua_states; // Estados (USA)
 
+    @NotNull(message = "Gender cannot be null. Please select your gender.")
+    @Enumerated(EnumType.STRING)
+    private Gender gender; // Gênero
+
+    @NotNull(message = "Marital status cannot be null. Please provide your marital status.")
+    @Enumerated(EnumType.STRING)
+    private MaritalStatus maritalStatus; // Estado civil
+
+    @NotNull(message = "The city cannot be null. Please provide your city.")
     private String city; // Cidade
 
+    @NotNull(message = "The primary phone number cannot be null. Please provide a valid phone number.")
     private String phone1; // Telefone 1
 
+    @NotNull(message = "The secondary phone number cannot be null. Please provide a valid phone number.")
     private String phone2; // Telefone 2
 
+    @NotNull(message = "The email cannot be null. Please provide a valid email address.")
     private String email; // E-Mail
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @NotNull(message = "Usuário esta null nesse caralho")
     private Users user;
 
     public PersonalInfo(String id) {
@@ -48,7 +64,6 @@ public class PersonalInfo {
     }
 
     public PersonalInfo() {
-
     }
 
     public Users getUser() {
@@ -115,12 +130,12 @@ public class PersonalInfo {
         this.address = address;
     }
 
-    public EuaStates getState() {
-        return state;
+    public EuaStates getEua_states() {
+        return eua_states;
     }
 
-    public void setState(EuaStates state) {
-        this.state = state;
+    public void setEua_states(EuaStates state) {
+        this.eua_states = state;
     }
 
     public String getCity() {
@@ -164,7 +179,7 @@ public class PersonalInfo {
                 ", maritalStatus='" + maritalStatus + '\'' +
                 ", hasChildren=" + hasChildren +
                 ", address='" + address + '\'' +
-                ", state='" + state + '\'' +
+                ", state='" + eua_states + '\'' +
                 ", city='" + city + '\'' +
                 ", phone1='" + phone1 + '\'' +
                 ", phone2='" + phone2 + '\'' +

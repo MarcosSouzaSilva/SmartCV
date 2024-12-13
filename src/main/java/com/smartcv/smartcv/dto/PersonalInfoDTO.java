@@ -5,24 +5,30 @@ import com.smartcv.smartcv.dto.enums.Gender;
 import com.smartcv.smartcv.dto.enums.MaritalStatus;
 import com.smartcv.smartcv.model.PersonalInfo;
 import com.smartcv.smartcv.model.Users;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 
 public class PersonalInfoDTO {
 
     private String fullName; // Nome completo
 
-    private Gender gender; // Sexo
-
     private int age; // Idade (em anos)
-
-    private MaritalStatus maritalStatus; // Estado Civil
 
     private boolean hasChildren; // Tem Filho(s)?
 
     private String address; // Endereço
 
-    private EuaStates state; // Estado
+    @Enumerated(EnumType.STRING)
+    private EuaStates eua_states;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    @Enumerated(EnumType.STRING)
+    private MaritalStatus maritalStatus;
 
     private String city; // Cidade
 
@@ -32,9 +38,6 @@ public class PersonalInfoDTO {
 
     private String email; // E-Mail
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private Users user;
 
     public String getFullName() {
         return fullName;
@@ -84,12 +87,12 @@ public class PersonalInfoDTO {
         this.address = address;
     }
 
-    public EuaStates getState() {
-        return state;
+    public EuaStates getEua_states() {
+        return eua_states;
     }
 
-    public void setState(EuaStates state) {
-        this.state = state;
+    public void setEua_states(EuaStates eua_states) {
+        this.eua_states = eua_states;
     }
 
     public String getCity() {
@@ -125,18 +128,22 @@ public class PersonalInfoDTO {
     }
 
     public PersonalInfo request (){
+
         PersonalInfo personalInfo = new PersonalInfo();
+
         personalInfo.setFullName(this.fullName);
         personalInfo.setGender(this.gender);
         personalInfo.setAge(this.age);
         personalInfo.setMaritalStatus(this.maritalStatus);
         personalInfo.setHasChildren(this.hasChildren);
         personalInfo.setAddress(this.address);
-        personalInfo.setState(this.state);
+        personalInfo.setEua_states(this.eua_states);
         personalInfo.setCity(this.city);
         personalInfo.setPhone1(this.phone1);
         personalInfo.setPhone2(this.phone2);
-        personalInfo.setAddress(this.email);
+        personalInfo.setEmail(this.email);
+
+
         return personalInfo;
     }
 
@@ -149,7 +156,7 @@ public class PersonalInfoDTO {
                 ", maritalStatus='" + maritalStatus + '\'' +
                 ", hasChildren=" + hasChildren +
                 ", address='" + address + '\'' +
-                ", state='" + state + '\'' +
+                ", state='" + eua_states + '\'' +
                 ", city='" + city + '\'' +
                 ", phone1='" + phone1 + '\'' +
                 ", phone2='" + phone2 + '\'' +

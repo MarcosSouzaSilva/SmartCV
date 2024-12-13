@@ -2,6 +2,7 @@ package com.smartcv.smartcv.model;
 
 import com.smartcv.smartcv.dto.enums.Profession;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class Users {
     @Column(name = "id", columnDefinition = "CHAR(36)")
     private String id;
 
+    @Pattern(regexp = "^[a-zA-Z0-9 ]+$", message = "O username deve conter apenas letras, números e espaços.")
     private String username;
 
     private String email;
@@ -32,6 +34,8 @@ public class Users {
 
     @Enumerated(EnumType.STRING) // quando salvo no banco de dados vai salvar como string
     private Profession profession;
+
+
 
     public Users() {
         this.id = UUID.randomUUID().toString();
