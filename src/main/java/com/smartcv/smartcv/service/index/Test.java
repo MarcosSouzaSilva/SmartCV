@@ -11,7 +11,7 @@ import java.net.URL;
 
 public class Test {
 
-    private static final String API_KEY = "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";
+    private static final String API_KEY = "${SUA_CHAVE}";
 
     public static void main(String[] args) {
         System.out.println(chatGPT("hello, how are you?"));

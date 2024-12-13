@@ -5,7 +5,7 @@ spring:
     # Nome de usuário para conectar ao MySQL
     username: root
     # Senha para conectar ao MySQL
-    password: marcossouza144
+    password: ${PASSWORD_DATABASE}
     # Driver JDBC para MySQL
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
