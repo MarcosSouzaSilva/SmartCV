@@ -11,9 +11,9 @@
     align-items: center;
     gap: 10px;
     padding: 10px;
-    position: absolute;  /* Permite o posicionamento absoluto em relação ao body */
-    top: 1px;  /* Distância do topo */
-    right: 20px;  /* Distância da borda direita */
+    position: absolute; /* Permite o posicionamento absoluto em relação ao body */
+    top: 1px; /* Distância do topo */
+    right: 20px; /* Distância da borda direita */
 }
 
 
@@ -43,6 +43,7 @@
     color: gray;
     font-size: 14px;
 }
+
 .btn {
     display: inline-block;
     background-color: #007bff;
@@ -87,18 +88,20 @@ header nav li a {
 }
 
 
-header nav .access{
+header nav .access {
     display: flex;
     gap: 20px;
 }
-header nav .access button{
+
+header nav .access button {
     transition: 0.5s;
 }
 
 header nav .access button:hover {
     transform: scale(1.1);
 }
-header nav .access button a{
+
+header nav .access button a {
     text-decoration: none;
     padding: 15px;
     color: black;
@@ -110,6 +113,7 @@ header nav .access button a{
     padding: 7px;
     border-radius: 15px;
 }
+
 .Register {
     background-color: #000000;
     border: 2px solid #2C2C2C;
@@ -127,7 +131,7 @@ main {
     color: rgba(255, 255, 255, 0.71);
 }
 
-main h1{
+main h1 {
     font-size: 72px;
 }
 
@@ -202,4 +206,84 @@ footer {
     text-decoration: none;
     color: #333;
     transition: color 0.3s;
+}
+
+/* Ajustes para dispositivos móveis */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    nav {
+        flex-direction: column; /* Organiza os itens verticalmente */
+        gap: 15px;
+        padding: 10px;
+        align-items: flex-start; /* Alinha à esquerda */
+    }
+
+    nav li {
+        width: 100%; /* Faz os itens ocuparem a largura total */
+    }
+
+    nav li a {
+        display: block; /* Faz os links ocuparem a área toda */
+        padding: 10px 15px;
+        font-size: 16px;
+        text-align: left; /* Garante que o texto fique alinhado */
+    }
+
+    .access {
+        flex-direction: column; /* Organiza os botões verticalmente */
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .access button {
+        width: 100%; /* Botões ocupam toda a largura */
+    }
+
+    .profile {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+
+    main {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    main h1 {
+        font-size: 36px;
+    }
+
+    main p {
+        font-size: 18px;
+    }
+
+    .btn {
+        font-size: 16px;
+        padding: 12px 20px;
+        width: 100%;
+        text-align: center;
+    }
+
+    footer {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-column {
+        width: 100%;
+    }
 }

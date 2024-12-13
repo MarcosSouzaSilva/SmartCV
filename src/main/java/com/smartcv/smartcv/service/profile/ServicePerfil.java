@@ -1,7 +1,7 @@
 package com.smartcv.smartcv.service.profile;
 
 
-import com.smartcv.smartcv.dto.PerfilDTO;
+import com.smartcv.smartcv.dto.ProfileDTO;
 import com.smartcv.smartcv.dto.enums.Profession;
 import com.smartcv.smartcv.model.Users;
 import com.smartcv.smartcv.repository.UsersRepository;
@@ -32,7 +32,7 @@ public class ServicePerfil {
     @Autowired
     private CookieAttributes cookieAttributes;
 
-    public ModelAndView page(@ModelAttribute("dtoRegister") PerfilDTO dto) {
+    public ModelAndView page(@ModelAttribute("dtoRegister") ProfileDTO dto) {
         ModelAndView mv = new ModelAndView("profile/profile");
 
         mv.addObject("perfilDto", dto);
@@ -41,21 +41,21 @@ public class ServicePerfil {
         return mv;
     }
 
-    public ModelAndView pageAndInfo(@RequestParam(name = "id") String id, @ModelAttribute("perfilDto") PerfilDTO perfilDto, HttpServletRequest request) {
+    public ModelAndView pageAndInfo(@RequestParam(name = "id") String id, @ModelAttribute("perfilDto") ProfileDTO perfilDto, HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("profile/profile");
-
 
         var optionalCadastro = repository.findById(id);
 
         String newUsernameId = (String) request.getSession().getAttribute("id");
         String userIdFromSession = (String) request.getSession().getAttribute("id");
         String newUsername = (String) request.getSession().getAttribute("username");
+        String picture = (String) request.getSession().getAttribute("picture");
         String newUsernameProfession = (String) request.getSession().getAttribute("profession");
 
-        var infoForUserNull = newUsernameId == null && newUsername == null && newUsernameProfession == null && !userIdFromSession.equals(id) ;
+        Profession newUserProfession = Profession.valueOf(newUsernameProfession);
 
-        if (infoForUserNull) {
-            System.err.println("User is not logged in. Redirecting to the home page.");
+        if (!userIdFromSession.equals(id)) {
+            System.err.println("User is not logged in. Redirecting to the home page. 0");
             return new ModelAndView("redirect:/SmartCV/login");
         }
 
@@ -71,7 +71,9 @@ public class ServicePerfil {
             mv.addObject("perfilDto", perfilDto);
             mv.addObject("newUsernameId", newUsernameId);
             mv.addObject("newUsername", newUsername);
-            mv.addObject("newUsernameProfession", newUsernameProfession);
+            mv.addObject("newPicture", picture);
+
+            mv.addObject("newUserProfession", newUserProfession);
 
         } else {
             System.err.println("Id not found");
@@ -79,14 +81,14 @@ public class ServicePerfil {
         return mv;
     }
 
-    public ModelAndView update(@Valid @ModelAttribute("perfilDto") PerfilDTO dto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        ModelAndView mv = new ModelAndView("profile");
+    public ModelAndView update(@Valid @ModelAttribute("perfilDto") ProfileDTO dto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        ModelAndView mv = new ModelAndView("profile/profile");
 
         Users users = dto.request();
 
         mv.addObject("perfilDto", dto);
 
-        boolean invalidEmail = emailValid.validation(users);
+        boolean invalidEmail = emailValid.emailValid(users.getEmail());
 
         if (bindingResult.hasErrors()) {
             System.err.println("There was a bindingResult error");
@@ -102,16 +104,7 @@ public class ServicePerfil {
             return mv;
         }
 
-        Cookie[] cookies = request.getCookies();
-        String userId = null;
-
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("id".equals(cookie.getName())) {
-                    userId = cookie.getValue();
-                }
-            }
-        }
+        String userId = (String) request.getSession().getAttribute("id");
 
         if (userId != null) {
 
@@ -153,13 +146,16 @@ public class ServicePerfil {
                     request.getSession().setAttribute("profession", user.getProfession().name());
                     request.getSession().setAttribute("id", user.getId());
 
-                    Cookie userCookie = new Cookie("username", user.getUsername());
+                    String encodedUsername = user.getUsername() != null ? user.getUsername().replace(" ", "_") : "";
+                    String encodedId = user.getId() != null ? user.getId().replace(" ", "") : "";
+
+                    Cookie userCookie = new Cookie("username", encodedUsername);
                     cookieAttributes.setCookieAttributes(userCookie);
 
                     Cookie professionCookie = new Cookie("profession", user.getProfession().name());
                     cookieAttributes.setCookieAttributes(professionCookie);
 
-                    Cookie idCookie = new Cookie("id", user.getId());
+                    Cookie idCookie = new Cookie("id", encodedId);
                     cookieAttributes.setCookieAttributes(idCookie);
 
                     response.addCookie(idCookie);

@@ -1,12 +1,15 @@
 package com.smartcv.smartcv.dto;
 
+import com.smartcv.smartcv.model.Courses;
 import com.smartcv.smartcv.model.Education;
 
-public class EducationDTO {
+public class CoursesDTO {
 
     private String course; // Curso
 
     private String institution; // Instituição
+
+    private String moth; // Instituição
 
     private int graduation_year; // Ano de Conclusão do curso
 
@@ -35,24 +38,34 @@ public class EducationDTO {
         this.graduation_year = graduation_year;
     }
 
+    public String getMoth() {
+        return moth;
+    }
+
+    public void setMoth(String moth) {
+        this.moth = moth;
+    }
+
     @Override
     public String toString() {
-        return "EducationDTO{" +
+        return "CoursesDTO{" +
                 "course='" + course + '\'' +
                 ", institution='" + institution + '\'' +
-                ", graduationYear=" + graduation_year +
+                ", moth='" + moth + '\'' +
+                ", graduation_year=" + graduation_year +
                 '}';
     }
 
-    public Education request (){
+    public Courses request (){
 
-        Education education = new Education();
+        Courses courses = new Courses();
 
-        education.setCourse(this.course);
-        education.setGraduation_year(this.graduation_year);
-        education.setInstitution(this.institution);
+        courses.setCourse(this.course);
+        courses.setGraduation_year(this.graduation_year);
+        courses.setInstitution(this.institution);
+        courses.setMoth(this.moth);
 
 
-        return education;
+        return courses;
     }
 }

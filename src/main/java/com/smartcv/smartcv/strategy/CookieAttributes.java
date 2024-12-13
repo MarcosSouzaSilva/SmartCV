@@ -17,4 +17,5 @@ public class CookieAttributes implements CookiesAttributes {
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
     }
+
 }

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.util.UUID;
+
 
 @Service
 public class ServiceSignUp {
@@ -46,6 +48,7 @@ public class ServiceSignUp {
         view.addObject("dtoRegister", dto);
         view.addObject("listaStatusUser", Profession.values());
 
+
         return view;
     }
 
@@ -54,13 +57,12 @@ public class ServiceSignUp {
 
         Users users = registerDto.request();
 
-        var emailInvalid = emailValid.validation(users);
+        var emailValid = this.emailValid.emailValid(users.getEmail());
 
-        var passwordInvalid = isInvalidPassword.validation(users);
+        var passwordInvalid = isInvalidPassword.verificationOfPassword(users.getPassword());
 
         var emailExist = repository.findByEmail(users.getEmail());
 
-        var userIsNotNull = users.getUsername() != null && users.getEmail() != null && users.getPassword() != null && users.getProfession() != null;
 
         if (bindingResult.hasErrors()) {
             mv.addObject("listaStatusUser", Profession.values());
@@ -71,12 +73,14 @@ public class ServiceSignUp {
             bindingResult.rejectValue("email", "error.dtoRegister", "There is already a user with the email !");
             mv.addObject("listaStatusUser", Profession.values());
             mv.addObject("selectedProfession", registerDto.getProfession());
+
             return mv;
 
-        } else if (!emailInvalid) {
+        } else if (!emailValid) {
             bindingResult.rejectValue("email", "error.dtoRegister", "Email Invalid !");
             mv.addObject("listaStatusUser", Profession.values());
             mv.addObject("selectedProfession", registerDto.getProfession());
+
             return mv;
 
         } else if (passwordInvalid) {
@@ -84,44 +88,45 @@ public class ServiceSignUp {
             bindingResult.rejectValue("password", "error.loginDto", "☑ Supper and lower case letters and symbols");
             mv.addObject("listaStatusUser", Profession.values());
             mv.addObject("selectedProfession", registerDto.getProfession());
-            return mv;
 
-        } else if (userIsNotNull) {
+            return mv;
 
         } else {
 
-                try {
+            try {
 
-                    users.setPassword(securityConfig.encode(users.getPassword()));
+                users.setPassword(securityConfig.encode(users.getPassword()));
 
-                    this.repository.save(users);
+                this.repository.save(users);
 
-                    var user = repository.findById(users.getId()).get();
+                var user = repository.findByEmail(users.getEmail()).get();
 
-                    request.getSession().setAttribute("username", user.getUsername());
-                    request.getSession().setAttribute("id", user.getId());
-                    request.getSession().setAttribute("profession", user.getProfession().name());
+                request.getSession().setAttribute("username", user.getUsername());
+                request.getSession().setAttribute("id", user.getId());
+                request.getSession().setAttribute("profession", user.getProfession().name());
 
-                    Cookie userCookie = new Cookie("username", user.getUsername());
-                    cookieAttributes.setCookieAttributes(userCookie);
+                String encodedUsername = user.getUsername().replace(" ", "_");
+                String encodedId = user.getId().replace(" ", "");
 
-                    Cookie idCookie = new Cookie("id", user.getId());
-                    cookieAttributes.setCookieAttributes(idCookie);
+                Cookie userCookie = new Cookie("username", encodedUsername);
+                cookieAttributes.setCookieAttributes(userCookie);
 
-                    Cookie professionCookie = new Cookie("profession", user.getProfession().name());
-                    cookieAttributes.setCookieAttributes(professionCookie);
+                Cookie professionCookie = new Cookie("profession", user.getProfession().name());
+                cookieAttributes.setCookieAttributes(professionCookie);
 
-                    response.addCookie(userCookie);
-                    response.addCookie(idCookie);
-                    response.addCookie(professionCookie);
+                Cookie idCookie = new Cookie("id", encodedId);
+                cookieAttributes.setCookieAttributes(idCookie);
 
-                    return new ModelAndView("redirect:/SmartCV");
+                response.addCookie(userCookie);
+                response.addCookie(idCookie);
+                response.addCookie(professionCookie);
 
-                } catch (Exception e) {
-                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred, try it again");
-                    return null;
-                }
+                return new ModelAndView("redirect:/SmartCV");
+            } catch (Exception e) {
+
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred, try it again");
+                return null;
             }
-        return mv;
+        }
     }
 }

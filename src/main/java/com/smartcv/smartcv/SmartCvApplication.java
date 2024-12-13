@@ -8,5 +8,6 @@ public class SmartCvApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SmartCvApplication.class, args);
+
     }
 }

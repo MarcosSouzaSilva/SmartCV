@@ -10,14 +10,22 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Value;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ServiceLogin {
@@ -38,6 +46,8 @@ public class ServiceLogin {
     public ModelAndView login(@ModelAttribute("loginDto") LoginDTO loginDto) {
         ModelAndView modelAndView = new ModelAndView("login/login");
 
+        /*oauth2/authorization/google*/
+
         modelAndView.addObject("loginDto", loginDto);
 
         return modelAndView;
@@ -51,11 +61,11 @@ public class ServiceLogin {
 
         String plainPassword = users.getPassword();
 
-        var emailInvalid = emailValid.validation(users);
+        var emailInvalid = emailValid.emailValid(users.getEmail());
 
-        var userFromDB = repository.findByEmail(users.getEmail());   //  Busque o usuário pelo email fornecido no login
+        var userFromDB = repository.findByEmail(users.getEmail());   // Busque o usuário pelo email fornecido no login
 
-        var passwordInvalid = isInvalidPassword.validation(users);
+        var passwordInvalid = isInvalidPassword.verificationOfPassword(users.getPassword());
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -64,11 +74,13 @@ public class ServiceLogin {
 
         } else if (!emailInvalid) {
             bindingResult.rejectValue("email", "error.loginDto", "Invalid !");
+            System.out.println(users.getEmail());
             return mv;
 
         } else if (passwordInvalid) {
             bindingResult.rejectValue("password", "error.loginDto", "⬛ Your password need have at least 8 to 20 character.");
             bindingResult.rejectValue("password", "error.loginDto", "⬛ Supper and lower case letters and symbols.");
+            System.out.println(users.getEmail());
             return mv;
         }
 
@@ -87,23 +99,21 @@ public class ServiceLogin {
                     request.getSession().setAttribute("id", user.getId());
                     request.getSession().setAttribute("profession", user.getProfession().name());
 
-                    Cookie userCookie = new Cookie("username", user.getUsername());
+                    String encodedUsername = user.getUsername().replace(" ", "_");
+                    String encodedId = user.getId().replace(" ", "");
+
+                    Cookie userCookie = new Cookie("username", encodedUsername);
                     cookieAttributes.setCookieAttributes(userCookie);
 
                     Cookie professionCookie = new Cookie("profession", user.getProfession().name());
                     cookieAttributes.setCookieAttributes(professionCookie);
-                    System.err.println("1");
 
-                    Cookie userCookieId = new Cookie("id", user.getId());
-                    cookieAttributes.setCookieAttributes(userCookieId);
-
-                    System.err.println("2");
+                    Cookie idCookie = new Cookie("id", encodedId);
+                    cookieAttributes.setCookieAttributes(idCookie);
 
                     response.addCookie(userCookie);
-                    response.addCookie(userCookieId);
+                    response.addCookie(idCookie);
                     response.addCookie(professionCookie);
-
-                    System.err.println("12");
 
                     return new ModelAndView("redirect:/SmartCV");
 
@@ -111,7 +121,7 @@ public class ServiceLogin {
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred, try it again");
                     return null;
                 }
-            } else {
+            }else {
                 bindingResult.rejectValue("password", "error.loginDto", "User or password invalid, try again.");
                 return mv;
             }

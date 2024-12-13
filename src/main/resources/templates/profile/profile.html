@@ -23,23 +23,33 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="profile-header">
-            <div class="profile-avatar">
-                <img src="https://img.icons8.com/color/48/test-account.png" alt="Profile Picture">
+            <div th:if="${newPicture}" class="profile-avatar">
+                <img th:src="${newPicture}" alt="Avatar" class="avatar">
             </div>
-            <h3 class="profile-name" th:text="${newUsername}"></h3> <!-- Nome padrão se não tiver usuário -->
-            <p class="profile-job" th:text="${newUsernameProfession}"></p>
+
+            <div th:if="${newPicture == null}">
+
+
+                <img src="https://img.icons8.com/color/48/test-account.png" alt="Avatar" class="avatar">
+
+            </div>
+
+            <h3 class="profile-name"  th:text="${newUsername.replace('_', ' ')}"></h3> <!-- Nome padrão se não tiver usuário -->
+            <p class="profile-job" th:text="${newUserProfession}"></p>
         </div>
 
         <!-- Form -->
-        <form th:action="@{/SmartCV/profile(id=${newUsernameId})}" method="post" th:object="${perfilDto}" class="profile-form" >
+        <form th:action="@{/SmartCV/profile(id=${newUsernameId})}" method="post" th:object="${perfilDto}"
+              class="profile-form">
             <div class="form-group">
-                <label for="first-name">Name</label>
-                <input type="text" th:field="*{username}" id="first-name" placeholder="Name">
+                <label for="first-name" >Username</label>
+                <input type="text" th:field="*{username}" id="first-name" placeholder="Name" required>
             </div>
 
             <div class="form-group" th:classappend="${#fields.hasErrors('email')} ? 'has-error' : ''">
                 <label for="email">Email</label>
-                <input type="text" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" th:field="*{email}" id="email" placeholder="Email">
+                <input type="text" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                       th:field="*{email}" id="email" placeholder="Email" required>
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
             </div>
 
@@ -49,22 +59,17 @@
                 <select id="work" name="profession" class="select-custom">
                     <option th:each="profession : ${listaStatusUser}"
                             th:value="${profession.name()}"
-                            th:text="${profession.name().replace('_', ' ')}"
+                            th:text="${profession.displayName}"
                             th:selected="${profession} == ${selectedProfession}">
                     </option>
 
                 </select>
             </div>
 
-
-            <div class="form-group">
-                <label for="about">About me</label>
-                <textarea id="about" placeholder="About me"></textarea>
-            </div>
-
             <button type="submit" class="submit-btn">Save</button>
         </form>
     </main>
 </div>
+
 </body>
 </html>

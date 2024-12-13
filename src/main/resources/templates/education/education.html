@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCV - Information Personal</title>
+    <link rel="stylesheet" th:href="@{/education/style.css}">
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li>SmartCV</li>
+            <li>Product</li>
+            <li>Solutions</li>
+            <li>Community</li>
+            <li>Resources</li>
+            <li>Pricing</li>
+            <li>Contact</li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <h1>University 2/6</h1>
+        <form th:action="@{/SmartCV/education}" th:object="${educationDTO}" method="post">
+            <!-- Existing form fields -->
+            <div class="form-row">
+                <label for="course">Course</label>
+                <input type="text" th:classappend="${#fields.hasErrors('course')} ? 'is-invalid' : ''"
+                       th:field="*{course}" id="course" name="course" required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('course')}" th:errors="*{course}"></div>
+            </div>
+
+            <div class="form-row">
+                <label for="institution">Institution</label>
+                <input type="text" th:classappend="${#fields.hasErrors('institution')} ? 'is-invalid' : ''"
+                       th:field="*{institution}" id="institution" name="institution" required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('institution')}" th:errors="*{institution}"></div>
+            </div>
+
+            <div class="form-row">
+                <label for="graduationYear">Graduation Year</label>
+                <input type="number" th:classappend="${#fields.hasErrors('graduation_year')} ? 'is-invalid' : ''"
+                       th:field="*{graduation_year}" id="graduationYear" name="graduationYear" required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('graduation_year')}" th:errors="*{graduation_year}"></div>
+            </div>
+
+            <div class="form-buttons">
+                <button type="button" class="btn back">Back</button>
+                <button type="submit" class="btn next">Next</button>
+            </div>
+        </form>
+    </div>
+</main>
+<script>
+    document.querySelector('.btn.back').addEventListener('click', function() {
+        window.history.back();
+    });
+</script>
+</body>
+</html>
