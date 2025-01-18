@@ -10,6 +10,7 @@ import com.smartcv.smartcv.strategy.EmailValid;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.time.Duration;
 
 @Service
 public class ServicePerfil {
@@ -46,15 +48,30 @@ public class ServicePerfil {
 
         var optionalCadastro = repository.findById(id);
 
-        String newUsernameId = (String) request.getSession().getAttribute("id");
-        String userIdFromSession = (String) request.getSession().getAttribute("id");
-        String newUsername = (String) request.getSession().getAttribute("username");
-        String picture = (String) request.getSession().getAttribute("picture");
-        String newUsernameProfession = (String) request.getSession().getAttribute("profession");
+        String username = null;
+        String profession = null;
+        String picture = null;
 
-        Profession newUserProfession = Profession.valueOf(newUsernameProfession);
+        Cookie[] cookies = request.getCookies();
 
-        if (!userIdFromSession.equals(id)) {
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("username".equals(cookie.getName())) {
+                    username = cookie.getValue().replace("_", " "); // Corrigindo o formato ao pegar o valor
+                }
+                if ("profession".equals(cookie.getName())) {
+                    profession = cookie.getValue();
+                }
+                if ("id".equals(cookie.getName())) {
+                    id = cookie.getValue();
+                }
+                if ("picture".equals(cookie.getName())) {
+                    picture = cookie.getValue();
+                }
+            }
+        }
+
+        if (!id.equals(id)) {
             System.err.println("User is not logged in. Redirecting to the home page. 0");
             return new ModelAndView("redirect:/SmartCV/login");
         }
@@ -64,16 +81,15 @@ public class ServicePerfil {
             Users user = optionalCadastro.get();
 
             mv.addObject("listaStatusUser", Profession.values());
-            mv.addObject("selectedProfession", user.getProfession());
+            mv.addObject("selectedProfession", Profession.valueOf(profession));
 
             perfilDto.fromDtoCadastro(user);
 
             mv.addObject("perfilDto", perfilDto);
-            mv.addObject("newUsernameId", newUsernameId);
-            mv.addObject("newUsername", newUsername);
-            mv.addObject("newPicture", picture);
-
-            mv.addObject("newUserProfession", newUserProfession);
+            mv.addObject("newUsername", username); // Passando o valor correto para a view
+            mv.addObject("newPicture", picture); // Passando o valor correto para a view
+            mv.addObject("newUsernameId", id);
+            mv.addObject("newUserProfession", Profession.valueOf(profession));
 
         } else {
             System.err.println("Id not found");
@@ -104,7 +120,17 @@ public class ServicePerfil {
             return mv;
         }
 
-        String userId = (String) request.getSession().getAttribute("id");
+        String userId = null;
+
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("id".equals(cookie.getName())) {
+                    userId = cookie.getValue();
+                }
+            }
+        }
 
         if (userId != null) {
 
@@ -171,4 +197,30 @@ public class ServicePerfil {
         }
         return new ModelAndView("redirect:/SmartCV");
     }
+
+    public ModelAndView logout(HttpServletResponse response) {
+
+
+        Cookie idCookie = new Cookie("id", null);
+        idCookie.setPath("/");
+        idCookie.setHttpOnly(true);
+        idCookie.setMaxAge(0);
+        response.addCookie(idCookie);
+
+        Cookie userCookie = new Cookie("username", null);
+        userCookie.setPath("/");
+        userCookie.setHttpOnly(true);
+        userCookie.setMaxAge(0);
+        response.addCookie(userCookie);
+
+        Cookie professionCookie = new Cookie("profession", null);
+        professionCookie.setPath("/");
+        professionCookie.setHttpOnly(true);
+        professionCookie.setMaxAge(0);
+        response.addCookie(professionCookie);
+
+        return new ModelAndView("redirect:/SmartCV");
+
+    }
+
 }

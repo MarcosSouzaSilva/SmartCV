@@ -11,6 +11,7 @@ import com.smartcv.smartcv.service.signUp.ServiceSignUp;
 import com.smartcv.smartcv.service.userProfile.ServiceUserProfile;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -20,8 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-
-;
 
 @Controller
 @RequestMapping("/SmartCV")
@@ -45,7 +44,6 @@ public class ControllerSmartCv {
     @Autowired
     private ServicePerfil servicePerfil;
 
-
     @Autowired
     private ServiceCourses serviceCourses;
 
@@ -53,7 +51,7 @@ public class ControllerSmartCv {
     private ServicePersonalInfo servicePersonalInfo;
 
     @GetMapping
-    public ModelAndView index(HttpServletRequest request)  {
+    public ModelAndView index(HttpServletRequest request) {
         return serviceIndex.index(request);
     }
 
@@ -114,7 +112,7 @@ public class ControllerSmartCv {
     }
 
     @PostMapping("/login")
-    public ModelAndView loginSend(@Valid @ModelAttribute("loginDto")  LoginDTO loginDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ModelAndView loginSend(@Valid @ModelAttribute("loginDto") LoginDTO loginDto, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws IOException {
         return serviceLogin.sendLogin(loginDto, bindingResult, request, response);
     }
 
@@ -132,6 +130,12 @@ public class ControllerSmartCv {
     public ModelAndView userProfile (OAuth2AuthenticationToken oAuth2AuthenticationToken, HttpServletRequest request, HttpServletResponse response){
         return userProfile.userProfile(oAuth2AuthenticationToken, request, response);
     }
+
+    @PostMapping("/logout")
+    public ModelAndView userProfile (HttpServletResponse response){
+        return servicePerfil.logout(response);
+    }
+
 
 
 }

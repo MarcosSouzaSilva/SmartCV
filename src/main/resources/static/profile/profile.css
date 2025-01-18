@@ -13,6 +13,19 @@ body {
     display: flex;
 }
 
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #ff4d4d;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #ff1a1a;
+}
+
 .container {
     display: flex;
     width: 100%;

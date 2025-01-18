@@ -75,7 +75,7 @@ public class ServiceLogin {
             System.out.println(users.getEmail());
             return mv;
         }
-
+//  422
         if (userFromDB.isPresent()) { // Verifica se o usuário foi encontrado
             // Recupere o hash da senha armazenado no banco de dados
             String hashedPasswordFromDB = userFromDB.get().getPassword();

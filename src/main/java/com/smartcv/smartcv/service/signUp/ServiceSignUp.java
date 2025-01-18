@@ -21,6 +21,11 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 
 
+/**
+ *
+ * @Author
+ */
+
 @Service
 public class ServiceSignUp {
 
@@ -47,7 +52,6 @@ public class ServiceSignUp {
         view.addObject("dtoRegister", dto);
         view.addObject("listaStatusUser", Profession.values());
 
-
         return view;
     }
 
@@ -58,7 +62,7 @@ public class ServiceSignUp {
 
         var emailValid = this.emailValid.emailValid(users.getEmail());
 
-        var passwordInvalid = isInvalidPassword.verificationOfPassword(users.getPassword());
+        var passwordInvalid = this.isInvalidPassword.verificationOfPassword(users.getPassword());
 
         var emailExist = repository.findByEmail(users.getEmail());
 
@@ -105,7 +109,7 @@ public class ServiceSignUp {
                 request.getSession().setAttribute("profession", user.getProfession().name());
 
                 String encodedUsername = user.getUsername().replace(" ", "_");
-                String encodedId = user.getId().replace(" ", "");
+                String encodedId = user.getId().replace(" ", "");//bdd        tdd
 
                 Cookie userCookie = new Cookie("username", encodedUsername);
                 cookieAttributes.setCookieAttributes(userCookie);

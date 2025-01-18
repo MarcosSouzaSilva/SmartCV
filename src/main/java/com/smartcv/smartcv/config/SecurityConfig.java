@@ -13,10 +13,9 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 
-
-
 @Configuration
 public class SecurityConfig {
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -30,6 +29,7 @@ public class SecurityConfig {
                             "/SmartCV/login",
                             "/SmartCV/signUp",
                             "/SmartCV/userProfile",
+                            "/SmartCV/logout",
                             "/favicon.ico",
                             "/SmartCV/terms&Conditions",
                             "/SmartCV/error",
@@ -43,11 +43,6 @@ public class SecurityConfig {
                             "/SmartCV/profiles",
                             "/SmartCV/profile",
                             "/SmartCV/education",
-                            "/https://c30b-2804-1b3-a280-8bfb-a9fc-dd1c-983d-bbfe.ngrok-free.app",
-                            "https://c30b-2804-1b3-a280-8bfb-a9fc-dd1c-983d-bbfe.ngrok-free.app/SmartCV/**",
-                            "/SmartCV/oauth2/authorization/google",
-                            "/SmartCV/oauth2/**",  // Adicione isso
-                            "/SmartCV/login/oauth2/**",  // Adicione isso
                             "/SmartCV/personalInfo"
                     ).permitAll();
                     // Bloqueia explicitamente o acesso à rota específica com um parâmetro ID no perfil

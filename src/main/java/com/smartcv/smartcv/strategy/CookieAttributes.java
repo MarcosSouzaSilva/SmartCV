@@ -1,13 +1,14 @@
 package com.smartcv.smartcv.strategy;
 
-import com.smartcv.smartcv.strategy.impl.CookiesAttributes;
+import com.smartcv.smartcv.strategy.impl.CookiesAttributesImpl;
 import jakarta.servlet.http.Cookie;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
 @Component
-public class CookieAttributes implements CookiesAttributes {
+public class CookieAttributes implements CookiesAttributesImpl {
+
 
 
     @Override
@@ -17,4 +18,5 @@ public class CookieAttributes implements CookiesAttributes {
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
     }
+
 }

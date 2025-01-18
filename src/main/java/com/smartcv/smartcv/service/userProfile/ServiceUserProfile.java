@@ -55,7 +55,7 @@ public class ServiceUserProfile {
             Cookie idCookie = new Cookie("id", encodedId);
             cookieAttributes.setCookieAttributes(idCookie);
 
-            System.out.println("Username in session: " + request.getSession().getAttribute("picture"));
+            System.out.println("Picture in session: " + request.getSession().getAttribute("picture"));
 
             response.addCookie(userCookie);
             response.addCookie(pictureCookie);
@@ -66,6 +66,5 @@ public class ServiceUserProfile {
         } else {
             return new ModelAndView("redirect:/oauth2/authorization/google");
         }
-
     }
 }

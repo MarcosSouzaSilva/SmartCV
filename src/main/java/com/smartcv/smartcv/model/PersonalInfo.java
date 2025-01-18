@@ -46,6 +46,7 @@ public class PersonalInfo {
     @NotNull(message = "Usuário esta null nesse caralho")
     private Users user;
 
+
     public PersonalInfo(String id) {
         this.id = UUID.randomUUID().toString();
     }

@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class ServiceIndex {
 
 
-
     public ModelAndView index(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView("index/index");
 
@@ -38,7 +37,6 @@ public class ServiceIndex {
             }
         }
 
-
         if (username != null && profession != null) {
 
             System.out.println("---------------- O que foi salvo na sessão -------------------");
@@ -48,12 +46,11 @@ public class ServiceIndex {
             System.out.println("Picture de usuário salvo na sessão: " + picture);
             System.out.println("Profession de usuário salvo na sessão: " + profession);
 
-            if (username != null && profession != null) {
-                modelAndView.addObject("newUsername", username); // Passando o valor correto para a view
-                modelAndView.addObject("newPicture", picture); // Passando o valor correto para a view
-                modelAndView.addObject("newUserProfession", Profession.valueOf(profession));
-                modelAndView.addObject("newUsernameId", id);
-            }
+            modelAndView.addObject("newUsername", username); // Passando o valor correto para a view
+            modelAndView.addObject("newPicture", picture); // Passando o valor correto para a view
+            modelAndView.addObject("newUserProfession", Profession.valueOf(profession));
+            modelAndView.addObject("newUsernameId", id);
+
             return modelAndView;
         }
         return modelAndView;

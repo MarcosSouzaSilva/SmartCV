@@ -34,7 +34,8 @@
 
             </div>
 
-            <h3 class="profile-name"  th:text="${newUsername.replace('_', ' ')}"></h3> <!-- Nome padrão se não tiver usuário -->
+            <h3 class="profile-name" th:text="${newUsername.replace('_', ' ')}"></h3>
+            <!-- Nome padrão se não tiver usuário -->
             <p class="profile-job" th:text="${newUserProfession}"></p>
         </div>
 
@@ -42,7 +43,7 @@
         <form th:action="@{/SmartCV/profile(id=${newUsernameId})}" method="post" th:object="${perfilDto}"
               class="profile-form">
             <div class="form-group">
-                <label for="first-name" >Username</label>
+                <label for="first-name">Username</label>
                 <input type="text" th:field="*{username}" id="first-name" placeholder="Name" required>
             </div>
 
@@ -55,8 +56,11 @@
 
 
             <div class="form-group">
+
                 <label class="input_label" for="work">Profession</label>
+
                 <select id="work" name="profession" class="select-custom">
+
                     <option th:each="profession : ${listaStatusUser}"
                             th:value="${profession.name()}"
                             th:text="${profession.displayName}"
@@ -64,12 +68,32 @@
                     </option>
 
                 </select>
+
             </div>
 
-            <button type="submit" class="submit-btn">Save</button>
+            <div class="button-group">
+                <button type="submit" class="submit-btn">Save</button>
+
+            </div>
+
         </form>
+
+<div class="logout-div">
+        <form th:action="@{/SmartCV/logout}" method="post" class="logout-form">
+            <button type="submit" onclick="logout()" class="logout-btn">Logout</button>
+        </form>
+</div>
     </main>
+
 </div>
 
+<script>
+    function logout() {
+        // Aqui você pode adicionar a lógica para o logout
+        alert("Você foi desconectado !");
+        // Redirecionar para a página de login ou outra página
+        // window.location.href = 'login.html';
+    }
+</script>
 </body>
 </html>
