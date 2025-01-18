@@ -43,7 +43,7 @@ public class PersonalInfo {
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @NotNull(message = "Usuário esta null nesse caralho")
+    @NotNull(message = "The user is null")
     private Users user;
 
 
